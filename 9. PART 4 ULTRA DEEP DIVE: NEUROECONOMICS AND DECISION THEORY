@@ -1,0 +1,1155 @@
+PART 4 ULTRA DEEP DIVE: NEUROECONOMICS AND DECISION THEORY
+
+From Neuronal Firing Patterns to Collective Economic Intelligence
+
+---
+
+4.0 FOUNDATIONS: THE MATHEMATICS OF CHOICE
+
+4.0.1 Axiomatic Foundations of Rational Choice
+
+Definition 4.0.1 (Choice Function):
+Given a set of alternatives X and a collection \mathcal{B} \subseteq 2^X \setminus \{\emptyset\} of non-empty choice sets, a choice function C: \mathcal{B} \to 2^X satisfies:
+
+1. C(B) \subseteq B for all B \in \mathcal{B}
+2. C(B) \neq \emptyset for all B \in \mathcal{B}
+
+Revealed Preference Axioms:
+
+Weak Axiom of Revealed Preference (WARP):
+If x \in C(A) and x, y \in A \cap B and y \in C(B), then x \in C(B)
+
+Strong Axiom of Revealed Preference (SARP):
+The revealed preference relation R (where x R y if \exists A with x, y \in A and x \in C(A)) must be acyclic.
+
+Generalized Axiom of Revealed Preference (GARP):
+For any sequence x_1, x_2, \ldots, x_k with x_i R^0 x_{i+1} (directly revealed preferred), we cannot have x_k P x_1 (strictly revealed preferred).
+
+Theorem 4.0.2 (Afriat's Theorem):
+The following are equivalent:
+
+1. Observed choices satisfy GARP
+2. There exists a continuous, strictly increasing, concave utility function u: \mathbb{R}^n_+ \to \mathbb{R} that rationalizes the data
+3. There exist numbers U_i, \lambda_i > 0 such that:
+   U_i \leq U_j + \lambda_j p_j \cdot (x_i - x_j) \quad \forall i,j
+
+
+   Where (p_i, x_i) are price-quantity observations.
+
+4.0.2 Topological Approach to Choice
+
+Choice as Continuous Selection:
+Let K(X) be the space of non-empty compact subsets of X with Hausdorff metric:
+
+d_H(A, B) = \max\{\sup_{a \in A} d(a, B), \sup_{b \in B} d(b, A)\}
+
+A continuous choice is a continuous function C: K(X) \to X with C(A) \in A.
+
+Theorem 4.0.3 (Michael's Selection Theorem):
+If X is paracompact and F: X \to Y is a lower hemicontinuous correspondence with non-empty convex values in a Banach space, then F admits a continuous selection.
+
+Implication: Continuous preferences imply continuous choice functions under convexity assumptions.
+
+4.0.3 Category Theory of Decisions
+
+Definition 4.0.4 (Decision Category):
+Objects: Choice sets (X, \precsim) with preorder \precsim
+Morphisms: Order-preserving functions f: (X, \precsim_X) \to (Y, \precsim_Y)
+
+Universal Property of Optimal Choice:
+The choice of x^* \in X is universal if for every y \in X, there exists a unique morphism y \to x^*.
+
+Kan Extension for Intertemporal Choice:
+Given discount function D: \mathbb{T} \to \mathbb{R} (time to present), the present value is the left Kan extension:
+
+\text{PV} = \text{Lan}_D U
+
+
+Where U: \mathbb{T} \to \mathbb{R} is undiscounted utility.
+
+---
+
+4.1 DRIFT-DIFFUSION MODELS AT NEURONAL RESOLUTION
+
+4.1.1 Stochastic Integrate-and-Fire Neurons with Economic Inputs
+
+Leaky Integrate-and-Fire (LIF) Model for Valuation Neurons:
+
+C_m \frac{dV}{dt} = -g_L(V - E_L) + I_{\text{syn}}(t) + I_{\text{noise}}(t)
+
+
+Where:
+
+· V = membrane potential (subjective value accumulator)
+· C_m = membrane capacitance (valuation inertia)
+· g_L = leak conductance (value decay rate)
+· E_L = resting potential (baseline value)
+· I_{\text{syn}}(t) = \sum_i w_i \sum_k \delta(t - t_i^k) = synaptic inputs (evidence pulses)
+· I_{\text{noise}}(t) = Ornstein-Uhlenbeck noise
+
+Firing threshold: V_{\text{th}} = decision threshold
+
+First Passage Time Distribution for Decision:
+For drift \mu, diffusion \sigma, starting at a, boundary at \pm b:
+
+f(t; \mu, \sigma, a, b) = \frac{\pi\sigma^2}{4b^2} \sum_{k=1}^\infty k \cdot \sin\left(\frac{k\pi(a+b)}{2b}\right) \cdot \exp\left(-\frac{1}{2}\left(\frac{k\pi\sigma}{2b}\right)^2 t + \frac{\mu(a+b)}{\sigma^2} - \frac{\mu^2 t}{2\sigma^2}\right)
+
+4.1.2 Nested Drift-Diffusion for Hierarchical Decisions
+
+Two-Level Hierarchical DDM:
+Level 1 (Attribute Evaluation):
+
+dx_i = \mu_i dt + \sigma_i dW_i, \quad i = 1, \ldots, n
+
+
+Level 2 (Alternative Integration):
+
+dy_j = \sum_{i=1}^n w_{ji} \text{sign}(x_i) dt + \sigma_j dW_j
+
+Boundary Collapsing: Upper bound decreases with time:
+
+b(t) = b_0 e^{-\alpha t}
+
+
+Represents urgency signal in brain.
+
+4.1.3 Ornstein-Uhlenbeck Decision Process with Recalling
+
+Mean-Reverting Value Accumulation:
+
+dV = -\theta(V - \mu)dt + \sigma dW
+
+
+Where \mu = long-term mean value, \theta = mean-reversion rate.
+
+Laplace Transform of First Passage Time:
+For boundary at a > 0, starting at V_0 = 0:
+
+\mathbb{E}[e^{-s\tau}] = \frac{D_{-s/\theta}(\sqrt{2\theta}\mu/\sigma)}{D_{-s/\theta}(\sqrt{2\theta}a/\sigma)}
+
+
+Where D_\nu(z) = parabolic cylinder function.
+
+4.1.4 Jump-Diffusion Models for Surprise/Shocks
+
+Value Process with Jumps:
+
+dV = \mu dt + \sigma dW + J dN(t)
+
+
+Where N(t) = Poisson process with rate \lambda, J \sim \text{Normal}(\mu_J, \sigma_J^2) = jump size.
+
+Characteristic Function:
+
+\phi(u, t) = \exp\left[i\mu u t - \frac{1}{2}\sigma^2 u^2 t + \lambda t \left(e^{i\mu_J u - \frac{1}{2}\sigma_J^2 u^2} - 1\right)\right]
+
+---
+
+4.2 REINFORCEMENT LEARNING: FROM DOPAMINE TO DEEP RL
+
+4.2.1 Temporal Difference Learning with Eligibility Traces
+
+TD(λ) Algorithm:
+Value update:
+
+V(s) \leftarrow V(s) + \alpha \delta_t e_t(s)
+
+
+Where:
+
+· \delta_t = r_{t+1} + \gamma V(s_{t+1}) - V(s_t) = TD error
+· e_t(s) = \gamma\lambda e_{t-1}(s) + \mathbb{I}(s_t = s) = eligibility trace
+
+Neural Implementation:
+Dopamine neurons encode \delta_t, synaptic weights encode V(s).
+
+Actor-Critic with Basal Ganglia Circuitry:
+
+Critic (Striatum):
+
+\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)
+
+
+
+V(s) \leftarrow V(s) + \alpha_c \delta_t
+
+Actor (Direct/Indirect Pathways):
+Direct pathway (D1 receptors): promotes action
+
+\pi(a|s) \leftarrow \pi(a|s) + \alpha_a \delta_t e_t(a, s)
+
+
+Indirect pathway (D2 receptors): suppresses action
+
+4.2.2 Distributional Reinforcement Learning
+
+Categorical DQN (C51):
+Instead of learning expected value Q(s,a), learn distribution over returns Z(s,a).
+
+Projection onto Support:
+For atoms z_i = v_{\min} + i\Delta z, i = 0, \ldots, N-1, \Delta z = (v_{\max} - v_{\min})/(N-1)
+
+Target distribution:
+
+\Phi_{\mathcal{T}}Z_{\theta}(s,a)_i = \sum_{j=0}^{N-1} \left[ 1 - \frac{|[\hat{\mathcal{T}}z_j]^{v_{\max}}_{v_{\min}} - z_i|}{\Delta z} \right]_0^1 p_j(s', a^*)
+
+
+Where [\cdot]^{v_{\max}}_{v_{\min}} clips to [v_{\min}, v_{\max}], a^* = \arg\max_a q(s', a).
+
+Wasserstein Distance Loss:
+
+\mathcal{L}(\theta) = \mathbb{E}[d_p(\Phi_{\mathcal{T}}Z_{\theta'}, Z_{\theta})]
+
+4.2.3 Meta-Reinforcement Learning for Economic Adaptation
+
+Recurrent Policy with Memory:
+Policy \pi_\theta(a_t|s_t, h_t) where h_t = f_\phi(h_{t-1}, s_{t-1}, a_{t-1}, r_{t-1})
+
+Model-Agnostic Meta-Learning (MAML):
+
+\theta' = \theta - \alpha \nabla_\theta \mathcal{L}_{\mathcal{T}_i}(f_\theta)
+
+
+Meta-objective:
+
+\min_\theta \sum_{\mathcal{T}_i \sim p(\mathcal{T})} \mathcal{L}_{\mathcal{T}_i}(f_{\theta'})
+
+Economic Interpretation: Learning to adapt to new market conditions rapidly.
+
+4.2.4 Hierarchical Reinforcement Learning with Options
+
+Option Framework:
+Option o = (\mathcal{I}_o, \pi_o, \beta_o) where:
+
+· \mathcal{I}_o \subseteq \mathcal{S} = initiation set
+· \pi_o(a|s) = intra-option policy
+· \beta_o(s) \in [0,1] = termination function
+
+Option-Critic Architecture:
+Policy over options:
+
+\pi_\Omega(o|s) \propto \exp(Q_\Omega(s, o)/\tau)
+
+
+Gradient for intra-option policy:
+
+\frac{\partial Q_\Omega(s, o)}{\partial \theta} = \sum_{s', o'} \mu(s', o'|s, o) \frac{\partial}{\partial \theta} \log \pi_o(a|s) A_\Omega(s', o')
+
+
+Where \mu(s', o'|s, o) = discounted occupancy measure.
+
+---
+
+4.3 PROSPECT THEORY WITH NEUROBIOLOGICAL CONSTRAINTS
+
+4.3.1 Cumulative Prospect Theory (CPT) with Neuronal Implementation
+
+Value Function:
+
+v(x) = 
+\begin{cases}
+x^\alpha & x \geq 0 \\
+-\lambda(-x)^\beta & x < 0
+\end{cases}
+
+
+Typically: \alpha, \beta \approx 0.88, \lambda \approx 2.25
+
+Probability Weighting:
+
+w^+(p) = \frac{p^\gamma}{(p^\gamma + (1-p)^\gamma)^{1/\gamma}}
+
+
+
+w^-(p) = \frac{p^\delta}{(p^\delta + (1-p)^\delta)^{1/\delta}}
+
+
+Typically: \gamma \approx 0.61, \delta \approx 0.69
+
+Neuronal Basis of Loss Aversion:
+Let R_P, R_N be populations coding positive and negative outcomes.
+Firing rates:
+
+r_P(x) = k_P x^\alpha, \quad r_N(x) = k_N \lambda(-x)^\beta
+
+
+Loss aversion ratio: \lambda_{\text{neural}} = \frac{k_N}{k_P} \cdot \lambda
+
+4.3.2 Reference Point Adaptation Dynamics
+
+Reference point r_t evolves as:
+
+r_{t+1} = \rho r_t + (1-\rho) x_t
+
+
+Where \rho \in [0,1] is adaptation rate.
+
+More General:
+
+dr_t = \eta(r^* - r_t)dt + \sigma_r dW
+
+
+Where r^* = long-run reference (aspiration level).
+
+Differential Adaptation for Gains vs Losses:
+
+\Delta r_t = 
+\begin{cases}
+\eta_+(x_t - r_t) & x_t \geq r_t \\
+\eta_-(x_t - r_t) & x_t < r_t
+\end{cases}
+
+
+With \eta_- > \eta_+ (losses affect reference more).
+
+4.3.3 Neuroeconomic CPT with Risk-Attitude Modulation
+
+Dopamine modulates \alpha, \beta:
+
+\alpha = \alpha_0 + \kappa DA
+
+
+
+\beta = \beta_0 + \kappa' DA
+
+
+Where DA = dopamine level.
+
+Serotonin modulates \lambda:
+
+\lambda = \lambda_0 \exp(-\zeta 5HT)
+
+
+Where 5HT = serotonin level.
+
+Integrated Model:
+Value = V(P) = \sum_{i=1}^n \pi_i v(x_i - r)
+Where \pi_i are decision weights from w^+(p_i) or w^-(p_i).
+
+4.3.4 Third-Generation Prospect Theory (PT3)
+
+Disappointment-Aversion:
+Utility of outcome x_i:
+
+u(x_i) = v(x_i) + \mu \sum_{j: x_j > x_i} p_j [v(x_j) - v(x_i)] - \nu \sum_{j: x_j < x_i} p_j [v(x_i) - v(x_j)]
+
+
+Where \mu, \nu > 0 are disappointment and elation coefficients.
+
+Salience Theory (Bordalo et al.):
+Decision weight for outcome x_i in lottery L:
+
+\pi_i = \frac{p_i \delta_i}{\sum_j p_j \delta_j}
+
+
+Where salience \delta_i = \sigma(x_i, L) measures how much x_i stands out.
+
+Example: \sigma(x_i, L) = \sum_{j \neq i} p_j |x_i - x_j|^\theta
+
+---
+
+4.4 NEURAL CORRELATES OF ECONOMIC DECISION-MAKING
+
+4.4.1 fMRI-Based Neural Decoding of Preferences
+
+Multivoxel Pattern Analysis (MVPA):
+For each trial, fMRI BOLD signal in region R: \mathbf{y} \in \mathbb{R}^V (V voxels).
+
+Linear Decoder:
+
+\hat{w} = \arg\min_w \| \mathbf{X}w - \mathbf{y} \|^2 + \lambda \|w\|_1
+
+
+Where \mathbf{X} = design matrix of experimental conditions.
+
+Representational Similarity Analysis (RSA):
+Compute neural representational dissimilarity matrix (RDM):
+
+\text{RDM}_{ij} = 1 - \text{corr}(\mathbf{y}_i, \mathbf{y}_j)
+
+
+Compare to model RDMs from computational models.
+
+4.4.2 Electrophysiological Signatures of Decision Variables
+
+Local Field Potential (LFP) Analysis:
+Band-limited power in frequency band f:
+
+\text{BP}_f(t) = \left| \int_{-\infty}^\infty x(\tau) \psi_f(t-\tau) d\tau \right|^2
+
+
+Where \psi_f = Morlet wavelet at frequency f.
+
+Phase-Amplitude Coupling (PAC):
+Modulation index between phase of low-frequency (θ, 4-8 Hz) and amplitude of high-frequency (γ, 30-100 Hz):
+
+\text{MI} = \frac{| \langle A_\gamma e^{i\phi_\theta} \rangle |}{\sqrt{\langle A_\gamma^2 \rangle}}
+
+
+Where \langle \cdot \rangle = average over trials/time.
+
+Granger Causality for Effective Connectivity:
+For multivariate time series \mathbf{X}(t):
+
+X_i(t) = \sum_{j=1}^p \sum_{\tau=1}^T a_{ij}(\tau) X_j(t-\tau) + \epsilon_i(t)
+
+
+GC from j to i:
+
+F_{j\to i} = \ln\left( \frac{\text{var}(\epsilon_i^{\text{reduced}})}{\text{var}(\epsilon_i^{\text{full}})} \right)
+
+4.4.3 Dopamine Prediction Error Coding
+
+Dopamine Neuron Activity:
+
+DA(t) = \delta(t) + \text{baseline}
+
+
+Where \delta(t) = r(t) + \gamma V(s_{t+1}) - V(s_t)
+
+Three-Component Model:
+
+1. Positive PE: Burst firing (＞ 20 Hz)
+2. Negative PE: Pause in firing (＜ 1 Hz)
+3. Expected value: Tonic firing rate (3-8 Hz)
+
+Temporal Difference Error with Eligibility Trace:
+
+\delta(t) = r(t) + \gamma V(s_{t+1}) - V(s_t) + \lambda \delta(t-1)
+
+4.4.4 vmPFC as Value Integrator
+
+vmPFC integrates attributes:
+
+\text{Activity}_\text{vmPFC} = \sum_{i=1}^n w_i v_i + \epsilon
+
+
+Where v_i = attribute values, w_i = attribute weights.
+
+Dynamic causal modeling (DCM):
+
+\frac{d\mathbf{z}}{dt} = \left(A + \sum_{j=1}^m u_j B_j\right)\mathbf{z} + C\mathbf{u}
+
+
+Where \mathbf{z} = neural states, u_j = experimental inputs, A = intrinsic connectivity, B_j = modulatory connectivity.
+
+---
+
+4.5 SOCIAL DECISION-MAKING AND THEORY OF MIND
+
+4.5.1 Bayesian Theory of Mind (BToM)
+
+Level-k Reasoning:
+Level 0: Random play
+Level 1: Best response to Level 0
+Level 2: Best response to Level 1
+...
+
+a_i^{k} = \arg\max_a \mathbb{E}_{a_{-i} \sim P^{k-1}}[u_i(a, a_{-i})]
+
+Recursive Bayesian Inference:
+Belief about other's level:
+
+P_i(k_{-i}|\text{history}) \propto P(\text{history}|k_{-i}) P_i(k_{-i})
+
+Cognitive Hierarchy (CH) Model:
+Distribution over levels: f(k) \propto \tau^k / k! (Poisson)
+Action: Average over beliefs about others' levels.
+
+4.5.2 Neural Basis of Social Preferences
+
+Inequity Aversion (Fehr-Schmidt):
+Utility of player i:
+
+U_i(x) = x_i - \alpha_i \frac{1}{n-1} \sum_{j \neq i} \max(x_j - x_i, 0) - \beta_i \frac{1}{n-1} \sum_{j \neq i} \max(x_i - x_j, 0)
+
+
+Typically: \beta_i \leq \alpha_i, 0 \leq \beta_i < 1.
+
+Neural correlates:
+
+· AI (anterior insula): encodes \alpha_i (disadvantageous inequity)
+· VS (ventral striatum): encodes x_i
+· mPFC: computes comparison
+
+Reciprocity (Rabin):
+Utility:
+
+U_i(a_i, a_j) = \pi_i(a_i, a_j) + \tilde{\phi}_i \cdot \pi_j(a_j, a_i) + \tilde{\phi}_i \cdot \kappa_i \cdot \pi_j(a_j, a_i)^2
+
+
+Where \tilde{\phi}_i = \phi_i \cdot (1 + \kappa_i \pi_i) and \phi_i = kindness, \kappa_i = reciprocation intensity.
+
+4.5.3 Trust Game with Neurobiological Constraints
+
+Trust Game:
+Player 1 sends amount s \in [0, y_1], which triples to 3s
+Player 2 returns amount r \in [0, 3s]
+Payoffs: \pi_1 = y_1 - s + r, \pi_2 = y_2 + 3s - r
+
+Neural correlates:
+
+· Trust decision (s): TPJ, dmPFC (mentalizing)
+· Trustworthiness decision (r): AI, striatum (fairness, reward)
+· Oxytocin ↑ trust (especially after betrayal)
+
+Computational Model:
+Player 1: s = \theta_1 \cdot \mathbb{E}[r|s] + \epsilon_1
+Player 2: r = \theta_2 \cdot s + \theta_3 \cdot (3s - r) + \epsilon_2
+Where \theta_2 = reciprocity, \theta_3 = inequality aversion.
+
+4.5.4 Emotional Contagion in Financial Markets
+
+Emotional State Dynamics:
+For agent i, emotion e_i(t) \in [-1,1] (negative to positive).
+
+Contagion:
+
+\frac{de_i}{dt} = -\alpha e_i + \sum_{j \in N(i)} \beta_{ij} \tanh(e_j) + \sigma \xi_i(t)
+
+Market Impact:
+Excess return: r(t) = \mu + \lambda \bar{e}(t) + \epsilon(t)
+Where \bar{e}(t) = \frac{1}{N} \sum_i e_i(t).
+
+Volatility:
+
+\sigma^2(t) = \sigma_0^2 \exp\left(\gamma \cdot \text{var}(e_i(t))\right)
+
+---
+
+4.6 INTER-TEMPORAL CHOICE WITH HYPERBOLIC DISCOUNTING
+
+4.6.1 Generalized Hyperbolic Discounting
+
+Discount Function:
+
+D(t) = (1 + \alpha t)^{-\gamma/\alpha}
+
+
+Limiting cases:
+
+· \alpha \to 0: Exponential D(t) = e^{-\gamma t}
+· \alpha = 1: Hyperbolic D(t) = (1 + t)^{-\gamma}
+· \alpha = \gamma: Quasi-hyperbolic (β-δ)
+
+Quasi-Hyperbolic (β-δ) Model:
+
+U_t = u_t + \beta \sum_{\tau=t+1}^\infty \delta^{\tau-t} u_\tau
+
+
+Where \beta < 1 = present bias, \delta = standard discount factor.
+
+Neural Basis:
+
+· δ: dlPFC (long-term planning)
+· β: vmPFC (immediate reward), ventral striatum
+
+4.6.2 Dual-System Model of Self-Control
+
+System 1 (Impulsive):
+
+V_1(x, t) = \frac{v(x)}{1 + kt}
+
+
+System 2 (Patient):
+
+V_2(x, t) = v(x) e^{-rt}
+
+Decision:
+
+\text{Choose SS} \iff \frac{V_1(x_{SS}, t_{SS})}{V_1(x_{LL}, t_{LL})} > \frac{V_2(x_{SS}, t_{SS})}{V_2(x_{LL}, t_{LL})}
+
+
+Where SS = sooner smaller, LL = later larger.
+
+Neural Competition:
+dlPFC (System 2) inhibits vmPFC/VS (System 1) via GABAergic interneurons.
+
+4.6.3 Hyperbolic Absolute Risk Aversion (HARA)
+
+Utility Function:
+
+u(x) = \frac{1-\gamma}{\gamma} \left( \frac{ax}{1-\gamma} + b \right)^\gamma
+
+
+Special cases:
+
+· \gamma \to 0: Exponential utility u(x) = -e^{-ax}
+· \gamma \to -\infty: Quadratic utility u(x) = x - \frac{a}{2}x^2
+· \gamma = 1/2: Square root utility u(x) = \sqrt{x}
+· \gamma = 1: Log utility u(x) = \log(x + b/a)
+
+Risk Aversion:
+
+R_A(x) = \frac{a}{ax/(1-\gamma) + b}
+
+4.6.4 Present-Biased Preference with Sophistication vs Naivete
+
+Sophisticated: Knows future self will have present bias β
+Naive: Believes future self will have β = 1
+Partial Naivete: Believes future self will have \hat{\beta} \in (\beta, 1]
+
+Dynamically Inconsistent Planning:
+At time 0, plan consumption \{c_t^*\}
+At time t, actual consumption: c_t^{**} = \arg\max_{c_t} u(c_t) + \beta \sum_{\tau=t+1}^\infty \delta^{\tau-t} u(c_\tau^*)
+
+Gul-Pesendorfer Temptation Model:
+Utility from menu A:
+
+U(A) = \max_{x \in A} u(x) - \left[ \max_{y \in A} v(y) - v(x) \right]
+
+
+Where u = commitment utility, v = temptation utility.
+
+---
+
+4.7 AMBIGUITY AVERSION AND UNCERTAINTY NEUROSCIENCE
+
+4.7.1 α-MaxMin Expected Utility
+
+For ambiguity set \mathcal{P} of possible probabilities:
+
+V(f) = \alpha \min_{P \in \mathcal{P}} E_P[u(f)] + (1-\alpha) \max_{P \in \mathcal{P}} E_P[u(f)]
+
+
+Where α = ambiguity aversion coefficient.
+
+Smooth Ambiguity Model (Klibanoff et al.):
+
+V(f) = \int_\Delta \phi\left( \int_S u(f(s)) dP(s) \right) d\mu(P)
+
+
+Where μ = second-order belief over probabilities, φ = ambiguity attitude (φ concave = ambiguity averse).
+
+4.7.2 Neural Processing of Ambiguity vs Risk
+
+Ellsberg Paradox Neural Correlates:
+
+· Ambiguity: amygdala, orbitofrontal cortex (OFC)
+· Risk: striatum, insula
+
+Model:
+Let A = ambiguity level (0 = risk, 1 = complete ambiguity).
+Neural value:
+
+\hat{V} = (1-A) \cdot V_{\text{risk}} + A \cdot V_{\text{ambiguity}}
+
+
+Where V_{\text{ambiguity}} = \phi^{-1}(E[\phi(V_{\text{risk}})]) with φ concave.
+
+4.7.3 Info-Gap Decision Theory
+
+Robustness function:
+
+\hat{\alpha}(q, r_c) = \max\{\alpha: \min_{u \in U(\alpha, \tilde{u})} r(q, u) \geq r_c\}
+
+
+Where U(\alpha, \tilde{u}) = uncertainty set of size α around estimate \tilde{u}.
+
+Opportuneness function:
+
+\hat{\beta}(q, r_w) = \min\{\beta: \max_{u \in U(\beta, \tilde{u})} r(q, u) \geq r_w\}
+
+4.7.4 Knightian Uncertainty with Multiple Priors
+
+Gilboa-Schmeidler MaxMin Expected Utility:
+
+V(f) = \min_{P \in \mathcal{P}} E_P[u(f)]
+
+Variational Preferences (Maccheroni et al.):
+
+V(f) = \min_{P \in \Delta} \left\{ E_P[u(f)] + c(P) \right\}
+
+
+Where c(P) = cost of considering probability P.
+
+Neural Implementation via Robust Control:
+Brain minimizes worst-case scenario:
+
+J^* = \min_{\pi} \max_{w \in \mathcal{W}} E\left[ \sum_{t=0}^\infty \gamma^t r(s_t, a_t) + \theta \|w_t\|^2 \right]
+
+
+Subject to: s_{t+1} = f(s_t, a_t) + w_t
+
+---
+
+4.8 NEUROECONOMICS OF MARKET BEHAVIOR
+
+4.8.1 Neurofinance: Bubbles and Crashes
+
+Asset Pricing with Heterogeneous Agents:
+Three types:
+
+1. Fundamentalists: E_t^f[p_{t+1}] = p_t^* + v_f(p_t^* - p_t)
+2. Chartists: E_t^c[p_{t+1}] = p_t + g(p_t - p_{t-1})
+3. Noise traders: Random expectations
+
+Switching based on past performance:
+
+n_{t+1}^f = \frac{\exp(\beta U_t^f)}{\exp(\beta U_t^f) + \exp(\beta U_t^c)}
+
+
+Where U_t^i = past profits of strategy i.
+
+Neural basis:
+
+· Fundamentalists: dlPFC, parietal cortex
+· Chartists: striatum (reward prediction), insula (risk)
+· Switching: ACC (conflict monitoring)
+
+4.8.2 Herding Behavior with Social Learning
+
+Bayesian Social Learning:
+Private signal: s_i = \theta + \epsilon_i, \epsilon_i \sim N(0, \sigma_\epsilon^2)
+Public history: actions of others
+
+Posterior:
+
+p(\theta|\mathcal{H}_t, s_i) \propto p(s_i|\theta) \prod_{\tau=1}^t p(a_\tau|\theta, \mathcal{H}_{\tau-1})
+
+Informational Cascade: After some point, individuals ignore private signals.
+
+Neural basis of herding:
+
+· Private signal processing: sensory cortices
+· Social information: TPJ, mPFC
+· Conflict: ACC
+· Conformity: ventral striatum (reward from aligning)
+
+4.8.3 Neuroeconomic Market Microstructure
+
+Limit Order Book Dynamics with Neuro-Agents:
+Each agent i has:
+
+· Private value: v_i \sim F(\cdot)
+· Endowment: e_i
+· Risk aversion: \gamma_i
+
+Optimal bid:
+
+b_i = v_i - \frac{1}{2}\gamma_i \sigma^2 e_i
+
+Neural correlates of order placement:
+
+· Value calculation: vmPFC
+· Risk adjustment: amygdala, insula
+· Timing: basal ganglia (action selection)
+
+Market making with neural networks:
+Inventory I_t, cash C_t, mid-price p_t
+State: s_t = (I_t, C_t, p_t, \text{order flow}_t)
+Action: bid/ask quotes (b_t, a_t)
+Reward: r_t = \Delta C_t + \phi(I_t) - \lambda I_t^2 (P&L + inventory penalty)
+
+DQN for market making:
+
+Q(s, (b,a); \theta) \approx \mathbb{E}[\text{cumulative reward}|s, (b,a)]
+
+4.8.4 Neuro-Prediction of Market Movements
+
+fMRI-based market timing:
+Aggregate neural value signal from n subjects:
+
+V_t^{\text{neural}} = \frac{1}{n} \sum_{i=1}^n \text{activity}_i(\text{vmPFC})_t
+
+
+Trading signal: S_t = \text{sign}(V_t^{\text{neural}} - V_{t-1}^{\text{neural}})
+
+EEG-based high-frequency prediction:
+Frontal asymmetry index (FAI):
+
+\text{FAI}_t = \frac{\text{power}(\text{right frontal}) - \text{power}(\text{left frontal})}{\text{power}(\text{right frontal}) + \text{power}(\text{left frontal})}
+
+
+Correlated with risk appetite.
+
+Deep learning with neural + market data:
+Input: [p_t, v_t, \text{EEG}_t, \text{fMRI}_t, \ldots]
+Model: LSTM or Transformer
+Output: \hat{p}_{t+1}
+
+---
+
+4.9 COMPUTATIONAL PSYCHIATRY OF ECONOMIC BEHAVIOR
+
+4.9.1 Addiction as Disease of Temporal Discounting
+
+Hyperbolic discounting in addiction:
+Addicts have steeper discounting:
+
+D_{\text{addict}}(t) = \frac{1}{1 + k_{\text{addict}} t}, \quad k_{\text{addict}} > k_{\text{normal}}
+
+Dual-system model with hijacking:
+Drug cues overactivate System 1 (striatum, OFC), while impairing System 2 (dlPFC).
+
+Reinforcement learning model:
+Dopamine signal hijacked:
+
+\delta_t^{\text{drug}} = r_t^{\text{drug}} + \gamma Q^{\text{drug}}(s_{t+1}) - Q^{\text{drug}}(s_t)
+
+
+Becomes much larger than for natural rewards.
+
+Treatment as recalibration:
+Cognitive training to increase δ (long-term discount factor).
+
+4.9.2 Depression and Anhedonia
+
+Reward prediction error in depression:
+Blunted dopamine response:
+
+\delta_t^{\text{depressed}} = \eta \cdot \delta_t^{\text{normal}}, \quad \eta < 1
+
+Learned helplessness:
+If outcomes independent of actions, learn Q(s,a) \approx \text{constant}.
+
+Computational model:
+Depressed individuals have:
+
+· Lower learning rate α
+· Lower reward sensitivity ρ
+· Higher punishment sensitivity κ
+
+Treatment:
+Behavioral activation to increase α, ρ.
+
+4.9.3 Anxiety and Risk Perception
+
+Anxious individuals overestimate risk:
+
+\hat{\sigma}^2_{\text{anxious}} = \phi \cdot \sigma^2, \quad \phi > 1
+
+Amygdala hyperactivity:
+
+\text{Amygdala activity} = \beta_0 + \beta_1 \cdot \text{risk} + \beta_2 \cdot \text{anxiety} + \beta_3 \cdot \text{risk} \times \text{anxiety}
+
+
+With \beta_3 > 0 (interaction effect).
+
+Treatment:
+Exposure therapy to recalibrate risk estimates.
+
+4.9.4 OCD and Uncertainty Intolerance
+
+OCD as excessive uncertainty aversion:
+In ambiguity models, OCD patients have:
+
+· Larger ambiguity aversion α
+· Larger second-order uncertainty (wider μ)
+
+Checking behavior as uncertainty reduction:
+Cost of checking: c
+Benefit: reduces uncertainty from σ² to σ²/√n
+Check until: \text{marginal benefit} < c
+
+Treatment:
+ERP (Exposure and Response Prevention) to increase tolerance for uncertainty.
+
+---
+
+4.10 QUANTUM DECISION THEORY
+
+4.10.1 Quantum Probability in Decision-Making
+
+State vector |\psi\rangle in Hilbert space \mathcal{H}:
+
+|\psi\rangle = \sum_i c_i |i\rangle, \quad \sum_i |c_i|^2 = 1
+
+Projection to decision basis:
+Probability of choosing option i:
+
+P(i) = |\langle i|\psi\rangle|^2
+
+Interference effects:
+For two-stage decision (A then B):
+
+P(B) = |\langle B|U_A|\psi\rangle|^2
+
+
+Where U_A = unitary evolution during deliberation about A.
+
+Order effects:
+P(A \text{ then } B) \neq P(B \text{ then } A) due to non-commuting projections.
+
+4.10.2 Quantum-like Models of Preference Reversal
+
+Preference state as superposition:
+
+|\psi\rangle = \sqrt{p}|A\rangle + \sqrt{1-p}e^{i\theta}|B\rangle
+
+Measurement context changes basis:
+When asked about attribute X, project to \{|X_+\rangle, |X_-\rangle\} basis.
+
+Disjunction effect:
+Violation of total probability: P(B) \neq P(B|A)P(A) + P(B|\neg A)P(\neg A)
+
+Quantum explanation: Interference term:
+
+P(B) = |\langle B|\psi\rangle|^2 = \left| \langle B|A\rangle\langle A|\psi\rangle + \langle B|\neg A\rangle\langle \neg A|\psi\rangle \right|^2
+
+
+Includes interference 2\text{Re}(\langle B|A\rangle\langle A|\psi\rangle\langle\psi|\neg A\rangle\langle \neg A|B\rangle).
+
+4.10.3 Quantum Reinforcement Learning
+
+Quantum states for value representation:
+Value of state s: Q(s) = \langle \psi_s| \hat{Q} | \psi_s \rangle
+Where \hat{Q} = value operator.
+
+TD error:
+
+\delta = r + \gamma \langle \psi_{s'}|\hat{Q}|\psi_{s'}\rangle - \langle \psi_s|\hat{Q}|\psi_s\rangle
+
+Update:
+
+\hat{Q} \leftarrow \hat{Q} + \alpha \delta |\psi_s\rangle\langle\psi_s|
+
+Quantum advantage: Parallel evaluation of multiple actions via superposition.
+
+4.10.4 Quantum Game Theory
+
+Quantum Prisoner's Dilemma:
+Strategies as unitary operators:
+Cooperate: C = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}
+Defect: D = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
+Quantum strategy: Q = \begin{pmatrix} i & 0 \\ 0 & -i \end{pmatrix}
+
+Entanglement:
+Initial state: |\psi_0\rangle = J|00\rangle
+Where J = \frac{1}{\sqrt{2}}(I^{\otimes 2} + i\sigma_x^{\otimes 2})
+
+Final state:
+
+|\psi_f\rangle = J^\dagger (U_A \otimes U_B) J |00\rangle
+
+Payoff:
+
+\$ = \sum_{i,j \in \{0,1\}} P_{ij} |\langle ij|\psi_f\rangle|^2
+
+
+Where P_{ij} = classical payoff matrix.
+
+Quantum equilibrium: Sometimes better than classical.
+
+---
+
+4.11 COLLECTIVE DECISION-MAKING AND WISDOM OF CROWDS
+
+4.11.1 Condorcet Jury Theorem with Cognitive Noise
+
+N individuals, each has signal s_i = \theta + \epsilon_i, \epsilon_i \sim N(0, \sigma_i^2)
+
+Simple majority rule:
+
+\text{Decision} = \text{sign}\left( \sum_{i=1}^N \text{sign}(s_i) \right)
+
+Probability of correct decision:
+
+P_{\text{correct}} = \Phi\left( \frac{\sqrt{N}\mu}{\sqrt{\frac{4}{\pi} \sum_{i=1}^N \sigma_i^2}} \right)
+
+
+Where \mu = E[\theta] (signal strength), \Phi = normal CDF.
+
+Optimal weights:
+
+w_i^* = \frac{1/\sigma_i^2}{\sum_j 1/\sigma_j^2}
+
+
+Weighted decision: \sum_i w_i s_i
+
+4.11.2 Prediction Markets with Heterogeneous Beliefs
+
+Logarithmic Market Scoring Rule (LMSR):
+Cost function:
+
+C(\mathbf{q}) = b \log\left( \sum_{j=1}^m e^{q_j/b} \right)
+
+
+Price of share j:
+
+p_j(\mathbf{q}) = \frac{\partial C}{\partial q_j} = \frac{e^{q_j/b}}{\sum_k e^{q_k/b}}
+
+Bayesian updating in prediction markets:
+Trader i with prior \pi_i, signal s_i, updates to posterior \pi_i(\cdot|s_i)
+If market price p ≠ posterior expectation, trade occurs.
+
+Efficiency:
+Market aggregates information when traders are risk-neutral and have common prior.
+
+4.11.3 Deliberative Democracy with Network Effects
+
+DeGroot Model of Opinion Dynamics:
+
+x_i(t+1) = \sum_{j=1}^N w_{ij} x_j(t)
+
+
+Where w_{ij} ≥ 0, \sum_j w_{ij} = 1.
+
+In matrix form:
+
+\mathbf{x}(t) = W^t \mathbf{x}(0)
+
+Consensus reached if W is irreducible and aperiodic.
+
+Stubborn agents: Some w_{ii} = 1 (don't change opinion).
+
+Final opinions:
+
+\mathbf{x}(\infty) = (I - \tilde{W})^{-1} \tilde{W}_s \mathbf{x}_s(0)
+
+
+Where \tilde{W} = submatrix for non-stubborn agents, \tilde{W}_s = influence from stubborn.
+
+4.11.4 Neuro-Social Networks
+
+Each agent i has neural state \mathbf{n}_i(t) (fMRI/EEG features).
+
+Coupled dynamics:
+
+\frac{d\mathbf{n}_i}{dt} = f(\mathbf{n}_i) + \sum_{j \in N(i)} g(\mathbf{n}_i, \mathbf{n}_j) + \xi_i(t)
+
+Neural synchrony:
+Phase locking: \phi_i(t) - \phi_j(t) \to \text{constant}
+
+Functional connectivity:
+
+FC_{ij} = \text{corr}(\mathbf{n}_i(t), \mathbf{n}_j(t))
+
+Emergent collective intelligence:
+Group performance predicted by:
+
+· Neural diversity
+· Neural synchrony in right frontal regions
+· Inter-brain coherence in α band (8-12 Hz)
+
+---
+
+4.12 NEUROECONOMIC POLICY DESIGN
+
+4.12.1 Nudge Theory with Neural Constraints
+
+Choice architecture with three systems:
+
+1. Automatic: Defaults, framing, anchors
+2. Reflective: Commitment devices, planning prompts
+3. Social: Norms, social proof
+
+Neural basis of nudges:
+
+· Defaults: vmPFC activity for default option
+· Framing: amygdala for loss frame, striatum for gain frame
+· Anchors: parietal cortex (numeric processing)
+
+Optimal nudge intensity:
+Cost of nudge: c(n)
+Benefit: b(n) = \sum_i \Delta U_i(n)
+Optimal: n^* = \arg\max_n b(n) - c(n)
+
+4.12.2 Cognitive Tax Design
+
+Tax salience:
+Perceived tax rate: \hat{\tau} = \alpha \tau, with \alpha < 1 if tax is not salient.
+
+Behavioral response:
+
+x^* = \arg\max_x u(x(1-\hat{\tau})) - c(x)
+
+Optimal tax with behavioral agents:
+Maximize social welfare accounting for misperceptions.
+
+Sin taxes with present bias:
+For good with future harm h, current benefit b:
+Self 0 wants: tax = h (internalize externality)
+Self t (present-biased): underconsumes if tax > 0
+
+Optimal:
+
+\tau^* = h - \frac{\beta}{\gamma} \cdot \text{misperception}
+
+4.12.3 Neural Basis of Property Rights
+
+Endowment effect:
+
+WTP = \alpha WTA, \quad \alpha < 1
+
+Neural correlates:
+
+· vmPFC: value of owned item > value of identical not-owned item
+· insula: pain of losing owned item
+
+Evolutionary basis: Loss aversion as adaptation to uncertain environments.
+
+Policy implication: Default rules matter due to endowment effect.
+
+4.12.4 Neuroeconomic Contract Theory
+
+Incentive compatibility with social preferences:
+Agent utility:
+
+U = w - c(e) + \theta_1 \cdot \text{reciprocity} + \theta_2 \cdot \text{fairness} + \theta_3 \cdot \text{trust}
+
+Optimal contract:
+
+\max_{w(\cdot), e} E[\text{output} - w(\text{output})]
+
+
+Subject to:
+
+1. Participation: E[U] \geq \bar{U}
+2. Incentive: e \in \arg\max_{e'} E[U|e']
+
+With neural monitoring:
+Contract can depend on neural signals s_i:
+
+w = w(\text{output}, s_1, \ldots, s_n)
+
+Privacy-accuracy tradeoff:
+More neural data → better incentives but less privacy.
+
+---
+
+CONCLUSION OF PART 4 ULTRA DEEP DIVE
+
+We have constructed a comprehensive neuroeconomic theory that:
+
+1. Grounds decision theory in neuronal dynamics with precise mathematical models
+2. Integrates reinforcement learning with dopamine signaling and basal ganglia circuitry
+3. Quantifies behavioral biases through prospect theory with neural parameters
+4. Models social decision-making with theory of mind and social preferences
+5. Explains intertemporal choice through dual-system models with neural competition
+6. Captures ambiguity aversion through multiple-priors models with neural correlates
+7. Connects market behavior to individual neurobiology through agent-based models
+8. Diagnoses economic pathologies through computational psychiatry
+9. Extends to quantum decision models for paradoxical behaviors
+10. Scales to collective intelligence through network models of neural synchrony
+
+Key Theoretical Advances:
+
+1. Neuronal Drift-Diffusion Models with biological constraints (ion channels, neurotransmitters)
+2. Dopamine-Based RL with eligibility traces and actor-critic architecture
+3. Neuro-Modulated Prospect Theory where neurotransmitters control parameters
+4. Social Decision Circuits with explicit reciprocity and inequity aversion
+5. Dual-System Discounting with competing neural systems
+6. Uncertainty Processing with distinct neural pathways for risk vs ambiguity
+7. Market Microstructure with neuro-informed agents
+8. Quantum Cognition for preference reversals and context effects
+9. Collective Neurodynamics for group decision-making
+10. Neuro-Policy Design with neural constraint optimization
+
+Methodological Innovations:
+
+1. fMRI Decoding of hidden preference parameters
+2. EEG-Based Prediction of market movements
+3. Computational Psychiatry for economic dysfunction
+4. Neuro-Social Networks measuring inter-brain synchrony
+5. Quantum Decision Experiments testing superposition of preferences
+
+The neuroeconomic perspective completes the CORONA Protocol's unified theory of economic restoration. By understanding decisions at the neuronal level, we can:
+
+· Design better institutions that work with (not against) human nature
+· Create policies that account for actual (not idealized) decision-making
+· Build markets that aggregate distributed knowledge efficiently
+· Treat economic pathologies at their cognitive roots
+· Enhance collective intelligence through neural synchrony
+
+This is the science of economic choice—from ion channels to institutions, from synapses to societies, from neurons to nations.
